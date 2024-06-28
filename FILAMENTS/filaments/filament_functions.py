@@ -68,10 +68,10 @@ def import_filaments(path_to_filament_NDskl):
     filament_dm_dict (dict): Dictionary of filaments containing coordinates and other filament metrics obtained from DisPerSE. 
     '''
     # Imports the methods created by Janvi to read filaments 
-    from . import read_fils as rf
+    import read_fils as rf
     # Redirect to where filament .NDskl skeleton file from DisPerSE is located 
     sys.path.insert(0, path_to_filament_NDskl)
-    import filaments as fils
+    import filament_functions as fils
 
     skeleton_file_dm = path_to_filament_NDskl
     filaments_dm = rf.ReadFilament(skeleton_file_dm)
