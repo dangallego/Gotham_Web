@@ -9,12 +9,25 @@ import os
 import pandas as pd
 import sys
 
-def ploting_fills(fillament_idx, filament_dict,ax,colorfil="teal"):
+def ploting(filament_idx, filament_dict,ax,colorfil="teal"):
     """
     This function will plot fillaments given the fillament index and fillament dictionary
+    ======================================================================================
+    Paremeter
+
+    filament_idx: The index of each filament
+    filament_dict (dictionary): The dictionary of filaments 
+    ax: The axis you've created to plot the filaments on
+    colorfil: the color you wish to plot (default set ot teal)
+
+    =======================================================================================
+    Returns
+
+    A  3D   plot of filaments 
+
     """
-    sample=fils[fillament_idx]["nsamp"] 
-    cords=fils[fillament_idx]["px,py,pz"]
+    sample=filament_dict[fillament_idx]["nsamp"] 
+    cords=filament_dict[fillament_idx]["px,py,pz"]
     
     #plot the samples in between
     px = []
@@ -31,12 +44,26 @@ def ploting_fills(fillament_idx, filament_dict,ax,colorfil="teal"):
     
     fil_line = ax.plot3D(px,py,pz,c=colorfil,lw = '2',alpha=0.4)
 
-def plotting_fills_2D(fillament_idx, filament_dict,L,colorfil="black",offset=0.5):
+def plotting_2D(fillament_idx, filament_dict,L,colorfil="black",offset=0.5):
     """
-    This function plots fillaments in 2D so it can be mapped atop of gas cubes
+    This function plots fillaments in 2D atop a gas cube centered at 0.5
+    ============================================================================
+    Parameters
+
+    filament_idx: The index of each filament
+    filament_dict (dictionary): The dictionary of filaments 
+    ax: The axis you've created to plot the filaments on
+    colorfil: the color you wish to plot (default set to black)
+    offset: The offset to the cube you are plotting the filament over (default set of 0.5)
+
+    ===========================================================================
+    Returns
+
+    A 2D plot of filaments 
+
     """
-    sample=fils[fillament_idx]["nsamp"] 
-    cords=fils[fillament_idx]["px,py,pz"]
+    sample=filament_dict[fillament_idx]["nsamp"] 
+    cords=filament_dict[fillament_idx]["px,py,pz"]
     
     px= []
     py= []
@@ -51,12 +78,36 @@ def plotting_fills_2D(fillament_idx, filament_dict,L,colorfil="black",offset=0.5
         
     fil = plt.plot(px,py,c=colorfil,lw='2',alpha=0.5) 
 
+def nodes(): 
+    """
+    This function 
+    ==============================================================
+    Paremeters:
 
+    Returns: 
+    nodes (array): A 1D array of all nodes within a filament dictionary
+    """
+    
+def  saddles (): 
+    """
 
+    """
 
+def plot_nodes(): 
+    """
+    """
+
+def plot_saddles(): 
+    """
+
+    """
+def length(): 
+    """
+    
+    """
 #### ROUTINES BELOW TO IMPORT DATA AUTOMATICALLY AND MAKE PLOTS
     
-def import_filaments(path_to_filament_NDskl):
+def import_fill(path_to_filament_NDskl):
     '''
     Imports filaments and creates dictionary containing filament coordinates and metrics
     based on a given path to filament skeleton file. 
@@ -129,6 +180,7 @@ def filaments_nfil2(filament_dict, critical_points):
          of those saddles to slice the original filament dictionary.
          Result is a reduced dictionary of what should be proper half filaments 
          (each filament in the dictionary corresponds to saddles with nfils == 2).'''
+    
     saddles_nfils = cp_nfils(critical_points, 2, 2) #creates selective saddle dictionary with nfil == 2
     #finds index of half filaments 
     filIDs = np.zeros(len(saddles_nfils)) ; filIDs2 = np.zeros(len(saddles_nfils))

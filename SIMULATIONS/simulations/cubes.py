@@ -2,9 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd 
 
+#This package are tools that for Hew Horizona dn New Horizon AGN Simulated Boxes
+
 def read_cube(file):
     """
-    Reads in frotran file cube and returns files as n
+    Reads in frotran file cube and returns files as an array. 
+    ------------------------------------------------------------
+    Parameters
+
+    ------------------------------------------------------------
+    Returns
+
     """
     
     f = fort(file,'r') #reading in as fortran file
