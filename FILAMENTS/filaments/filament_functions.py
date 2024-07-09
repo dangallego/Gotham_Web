@@ -146,7 +146,7 @@ def import_fill(path_to_filament_NDskl):
 #function to slice a dictionary list by a particular set of keys 
 def dict_slice(dict, key, value):
     '''Indexes/slices a subset of a larger dictionary. 
-        For use with separating critical points (since the CP id's are gven).
+        For use with separating critical points (since the CP id's are given).
         Output is a list of dictionaries.'''
     N = len(dict)
     list = []
