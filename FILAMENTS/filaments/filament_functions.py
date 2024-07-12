@@ -111,9 +111,9 @@ def nodes(fil_dict):
     nodes_y= nodes[:,1]
     nodes_z= nodes[:,2]
     
-     return nodes     
+    return nodes     
     
-def  saddles (fil_dict): 
+def saddles(fil_dict): 
     """
     Creates an array of all the saddles withing a filament dictionary 
     
@@ -163,7 +163,7 @@ def bifurcation(fil_dict):
     """
     crit_points = fil_dict['critical_points']
     
-    saddles= [] #empty list
+    bif= [] #empty list
     
     for i in range(len(crit_points)): #you must iterate over every critical point
         
@@ -195,7 +195,7 @@ def plot_nodes(fil_dict,ax):
     scatter plot of nodes onto axis with label
     """
     
-    nodes =nodes(fil_dict)
+    nodes = nodes(fil_dict)
     
     x= nodes[:,0]
     y= nodes[:,1]
@@ -206,7 +206,7 @@ def plot_nodes(fil_dict,ax):
     
 
 def plot_saddles(fil_dict,ax): 
-     """
+    """
     Plots saddles onto a 3D axis
     
     Parameter
@@ -217,15 +217,16 @@ def plot_saddles(fil_dict,ax):
     scatter plot ofsaddles onto axis with label
     """
     
-    saddles =saddles(fil_dict)
+    saddles = saddles(fil_dict)
     
     x= saddles[:,0]
     y= saddles[:,1]
     z= saddles[:,2]
     
     return ax.scatter(x,y,z,alpha=0.5,label='saddles')
+
 def plot_bif(fil_dict,ax): 
-     """
+    """
     Plots saddles onto a 3D axis
     
     Parameter
@@ -236,13 +237,15 @@ def plot_bif(fil_dict,ax):
     scatter plot ofsaddles onto axis with label
     """
     
-    bif =biffucation(fil_dict)
+        
+    bif = bifurcation(fil_dict)
+    
     
     x= bif[:,0]
     y= bif[:,1]
     z= bif[:,2]
     
-    return ax.scatter(x,y,z,alpha=0.5,label='biffurcation')
+    return ax.scatter(x,y,z,alpha=0.5,label='bifurcation')
     
     
 def length(): 
