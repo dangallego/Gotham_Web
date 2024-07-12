@@ -9,7 +9,7 @@ import os
 import pandas as pd
 import sys
 
-def ploting(filament_idx, filament_dict,ax,colorfil="teal"):
+def plot(filament_idx, filament_dict,ax,colorfil="teal"):
     """
     This function will plot fillaments given the fillament index and fillament dictionary
     ======================================================================================
@@ -44,7 +44,7 @@ def ploting(filament_idx, filament_dict,ax,colorfil="teal"):
     
     fil_line = ax.plot3D(px,py,pz,c=colorfil,lw = '2',alpha=0.4)
 
-def plotting_2D(fillament_idx, filament_dict,L,colorfil="black",offset=0.5):
+def plot_2D(fillament_idx, filament_dict,L,colorfil="black",offset=0.5):
     """
     This function plots fillaments in 2D atop a gas cube centered at 0.5
     ============================================================================
@@ -77,34 +77,182 @@ def plotting_2D(fillament_idx, filament_dict,L,colorfil="black",offset=0.5):
         py.append(py1)
         
     fil = plt.plot(px,py,c=colorfil,lw='2',alpha=0.5) 
+    
 
-def nodes(): 
+def nodes(fil_dict): 
     """
-    This function 
+    Creates an array of all the nodes withing a filament dictionary 
+    
     ==============================================================
-    Paremeters:
+    Paremeters: 
+    
+    fil_dict: The dictionary of filaments
 
     Returns: 
     nodes (array): A 1D array of all nodes within a filament dictionary
+    
+    """
+    crit_points = fil_dict['critical_points']
+    
+    nodes= [] #empty list
+    
+    for i in range(len(crit_points)): #you must iterate over every critical point
+        
+        if crit_points[i]['cp_idx']==3: # 3 indicates nodes or peaks 
+            
+            nodes_temp =[crit_points[i]['px'],crit_points[i]['py'],crit_points[i]['pz']]# creating an array of x,y,z cords
+            
+            nodes.append(nodes_temp)
+            
+    nodes=np.array(nodes)
+    
+    #separates x,y,z arrays 
+    nodes_x= nodes[:,0]
+    nodes_y= nodes[:,1]
+    nodes_z= nodes[:,2]
+    
+    return nodes     
+    
+def saddles(fil_dict): 
+    """
+    Creates an array of all the saddles withing a filament dictionary 
+    
+    ==============================================================
+    Paremeters: 
+    
+    fil_dict: The dictionary of filaments
+
+    Returns: 
+    saddles (array): A 1D array of all nodes within a filament dictionary
+    
+    """
+    crit_points = fil_dict['critical_points']
+    
+    saddles= [] #empty list
+    
+    for i in range(len(crit_points)): #you must iterate over every critical point
+        
+        if crit_points[i]['cp_idx']==2: # 2 identifies saddles 
+            
+            saddles_temp =[crit_points[i]['px'],crit_points[i]['py'],crit_points[i]['pz']] # creating an array of x,y,z cords
+            
+            saddles.append(sadles_temp)
+            
+    saddles=np.array(saddles)
+    
+    #separates x,y,z arrays
+    saddles_x= saddles[:,0]
+    saddles_y= saddles[:,1]
+    saddles_z= saddles[:,2]
+    
+    return saddles
+    
+    
+def bifurcation(fil_dict):
+    """
+    Creates an array of all the bifurcation points withing a filament dictionary 
+    
+    ==============================================================
+    Paremeters: 
+    
+    fil_dict: The dictionary of filaments
+
+    Returns: 
+    bif (array): A 1D array of all nodes within a filament dictionary
+    
+    """
+    crit_points = fil_dict['critical_points']
+    
+    bif= [] #empty list
+    
+    for i in range(len(crit_points)): #you must iterate over every critical point
+        
+        if crit_points[i]['cp_idx']==4: # 4 identifies bifurcation points
+            
+            bif_temp =[crit_points[i]['px'],crit_points[i]['py'],crit_points[i]['pz']] # creating an array of x,y,z cords
+            
+            bif.append(bif_temp)
+            
+    bif=np.array(bif)
+    
+    #separates x,y,z arrays
+    bif_x= bif[:,0]
+    bif_y= bif[:,1]
+    bif_z= bif[:,2]
+    
+    return bif
+
+
+def plot_nodes(fil_dict,ax): 
+    """
+    Plots nodes onto a 3D axis
+    
+    Parameter
+    fil_dict: filament dictionary
+    ax: axis you wish to plot on
+    
+    Returns
+    scatter plot of nodes onto axis with label
     """
     
-def  saddles (): 
-    """
+    nodes = nodes(fil_dict)
+    
+    x= nodes[:,0]
+    y= nodes[:,1]
+    z= nodes[:,2]
+    
+    return ax.scatter(x,y,z,alpha=0.5,label='nodes')
+    
+    
 
+def plot_saddles(fil_dict,ax): 
     """
+    Plots saddles onto a 3D axis
+    
+    Parameter
+    fil_dict: filament dictionary
+    ax: axis you wish to plot on
+    
+    Returns
+    scatter plot ofsaddles onto axis with label
+    """
+    
+    saddles = saddles(fil_dict)
+    
+    x= saddles[:,0]
+    y= saddles[:,1]
+    z= saddles[:,2]
+    
+    return ax.scatter(x,y,z,alpha=0.5,label='saddles')
 
-def plot_nodes(): 
+def plot_bif(fil_dict,ax): 
     """
+    Plots saddles onto a 3D axis
+    
+    Parameter
+    fil_dict: filament dictionary
+    ax: axis you wish to plot on
+    
+    Returns
+    scatter plot ofsaddles onto axis with label
     """
-
-def plot_saddles(): 
-    """
-
-    """
+    
+        
+    bif = bifurcation(fil_dict)
+    
+    
+    x= bif[:,0]
+    y= bif[:,1]
+    z= bif[:,2]
+    
+    return ax.scatter(x,y,z,alpha=0.5,label='bifurcation')
+    
+    
 def length(): 
     """
     
     """
+    
 #### ROUTINES BELOW TO IMPORT DATA AUTOMATICALLY AND MAKE PLOTS
     
 def import_fill(path_to_filament_NDskl):
