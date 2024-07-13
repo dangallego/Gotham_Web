@@ -42,33 +42,6 @@ class Filament:
         print(self.filament_dict)
 
 
-
-
-    def specific_critical_point(self, critical_point_type):
-
-        if critical_point_type == 'voids' or 'void':
-            cp = 0
-        elif critical_point_type == 'walls' or 'wall':
-            cp = 1
-        elif critical_point_type == 'saddles' or 'saddle' or 'saddle_points':
-            cp = 2
-        elif critical_point_type == 'peaks' or 'peak':
-            cp = 3
-        elif critical_point_type == 'bifurcation_points' or 'bi_points' or 'bp':
-            cp = 4
-        else:
-            return "Invalid critical point type. Refer to docstring for available critical point types."
-
-        critical_points = self.filament_dict['critical_points']
-        N = len(critical_points)
-        cp_list = []
-        for i in range(N):
-            C = critical_points[i]['cp_idx']
-            if C == cp:
-                cp_list.append(critical_points[i])
-        return cp_list
-
-
     def DataFrame(self):
         df = pd.DataFrame()
         for i in range(self.filament_dict['nfils']):
