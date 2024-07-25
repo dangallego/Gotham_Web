@@ -6,6 +6,139 @@ Python file containing list of functions useful for conducting statistical analy
 '''
 import numpy as np 
 import scipy.stats as ss
+from scipy import stats
+import matplotlib.pyplot as plt
+
+
+#### OUTLIER TREATMENT ####
+def filter_outliers_by_std(dataframe, parameter, num_sigmas=3, use_median=False):
+    '''
+    Removes outliers from a DataFrame based on the specified number of standard deviations from the mean or median.
+    
+    Parameters:
+    dataframe (pandas.DataFrame): The dataframe containing the data.
+    parameter (str): The column name of the dataframe to analyze.
+    num_sigmas (int), optional: The number of standard deviations to use as the threshold for defining outliers (default is 3).
+    use_median (bool), optional: Whether to use the median instead of the mean for the central tendency measure (default is False).
+    '''
+    if use_median:
+        center = np.median(dataframe[parameter])
+    else:
+        center = np.mean(dataframe[parameter])
+    
+    std = np.std(dataframe[parameter])
+    lower_bound = center - (num_sigmas * std) 
+    upper_bound = center + (num_sigmas * std)
+
+    filtered_df = dataframe[(dataframe[parameter] < upper_bound) & (dataframe[parameter] > lower_bound)]
+    
+    return filtered_df
+
+
+def create_outlier_mask(array, num_sigmas=4):
+    '''
+    Generates a boolean mask that identifies values within a specified number of standard deviations from the mean.
+
+    Parameters:
+    array (array-like): Array of numeric values from which to identify outliers.
+    num_sigmas (int), optional: The number of standard deviations to use for defining the range (default is 4).
+    '''
+    mean = np.mean(array)
+    std = np.std(array)
+    lower_bound = mean - (num_sigmas * std)
+    upper_bound = mean + (num_sigmas * std)
+
+    mask = (array > lower_bound) & (array < upper_bound)
+    return mask
+
+
+
+#### RESIDUAL METHODS ####
+def plot_binned_data(x, y, x_label = None, y_label=None, num_bins=None):
+    '''
+    Plots relational scatter plot between two parameters.
+    Parameters must be in form of Numpy array or Pandas Series
+    '''
+    xy = np.vstack([x, y])
+    z = stats.gaussian_kde(xy)(xy) # helps to plot density 
+
+    if num_bins == None: 
+        bin_medians, bin_edges, binnumber = stats.binned_statistic(x=x, values=y,statistic= 'median')
+        std, s_edges, s_binnumber = stats.binned_statistic(x=x, values = y, statistic = 'std')
+    
+    else: 
+        bin_medians, bin_edges, binnumber = stats.binned_statistic(x=x, values=y,statistic= 'median', bins = num_bins)
+        std, s_edges, s_binnumber = stats.binned_statistic(x=x, values = y, statistic = 'std', bins = num_bins)
+
+    plt.figure(figsize =(8,6))
+    plt.scatter(x, y, c = z, alpha = 0.3)
+    plt.xlabel(x_label if x_label else 'X')
+    plt.ylabel(y_label if x_label else 'Y')
+
+    # Errorbars 
+    errbars = (bin_edges[1:] + bin_edges[:-1])/2        # x position of median points
+    plt.errorbar(errbars ,bin_medians, yerr=std, fmt='r-')  # This plots median point x value, and median (which is y value)
+    plt.show()
+
+
+
+
+def residuals(x, y, num_bins=None): 
+    '''
+    Takes a parameter y and decouples parameter x from it (finding the residuals), 
+    returning the Delta Parameter (the y parameter with its correlation to x removed).
+    '''
+
+    # Statistics calculations 
+    if num_bins == None:
+        bin_medians, bin_edges, binnumber = stats.binned_statistic(x=x, values=y,statistic= 'median')
+        std, s_edges, s_binnumber = stats.binned_statistic(x=x, values = y, statistic = 'std')
+    else: 
+        bin_medians, bin_edges, binnumber = stats.binned_statistic(x=x, values=y,statistic= 'median', bins = num_bins)
+        std, s_edges, s_binnumber = stats.binned_statistic(x=x, values = y, statistic = 'std', bins = num_bins)
+    errbars = (bin_edges[1:] + bin_edges[:-1])/2 
+
+    # Slope calculations 
+    x1 = errbars[:-1] ; x2 = errbars[1:]
+    y1 = bin_medians[:-1] ; y2 = bin_medians[1:]
+    m = (y2 - y1) / (x2 - x1) # slope
+    b = -m*x1 + y1            # y-intercept
+
+    # Delta Parameter Calculation 
+    y_exp = np.zeros(len(y))  # y_expected array
+    i = 0
+    while i < len((x)):
+        xi = x[i]
+        for n in range(num_bins-1): # had to be 1 less than 3 of bins
+            if xi <= errbars[n] and xi >= errbars[n-1]:
+                Y = m[n] * xi + b[n]
+                y_exp[i] = Y 
+                deltaParam = y - y_exp
+            else:
+                pass
+        i+=1
+    
+    residuals = y - y_exp
+
+    return deltaParam, y_exp, residuals 
+
+
+def residuals_masked(x, y, num_bins=None): 
+    '''Takes a parameter in and decouples mass from it, returning the Delta Parameter. 
+        Treats the delta parameter outliers using standard dev. of 4 and higher and masking.
+        x and y must be numpy arrays.
+        '''
+    deltaParam, y_exp, residuals = residuals_masked(x, y, num_bins=None)
+
+    dmask = create_outlier_mask(deltaParam)
+
+    delta_param = deltaParam[dmask]
+    yexp = y_exp[dmask]
+    res = residuals[dmask]
+    X = x[dmask] # the original "X" array (which has typically been logmstar); sliced by dmask 
+ 
+    return delta_param, y_exp, res, X, dmask 
+
 
 
 #### RESAMPLING METHODS ####
