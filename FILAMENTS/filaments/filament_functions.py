@@ -26,8 +26,8 @@ def plot(filament_idx, filament_dict,ax,colorfil="teal"):
     A  3D   plot of filaments 
 
     """
-    sample=filament_dict[fillament_idx]["nsamp"] 
-    cords=filament_dict[fillament_idx]["px,py,pz"]
+    sample=filament_dict[filament_idx]["nsamp"] 
+    cords=filament_dict[filament_idx]["px,py,pz"]
     
     #plot the samples in between
     px = []
@@ -98,7 +98,7 @@ def nodes(fil_dict):
     
     for i in range(len(crit_points)): #you must iterate over every critical point
         
-        if crit_points[i]['cp_idx']==3: # 3 indicates nodes or peaks 
+        if crit_points[i]['cp_idx']==5: # 5 indicates nodes or peaks 
             
             nodes_temp =[crit_points[i]['px'],crit_points[i]['py'],crit_points[i]['pz']]# creating an array of x,y,z cords
             
@@ -181,7 +181,35 @@ def bifurcation(fil_dict):
     bif_z= bif[:,2]
     
     return bif
+def ploting_crit(filament_dict,ax):
+    """
+    Plots the all critical points of filaments in 3D 
 
+    ----------------------------------------------
+    Parameters: 
+    filament_dict: filament dictionary
+    ax: axis you's like to plot on
+    -------------------------------------------
+    Returns: 
+    3D plot of critical points
+    """
+    critical_points= filament_dict['critical_points']
+    sample =len(critical_points)
+    
+    px=[]
+    py=[]
+    pz=[]
+    
+    for i in range(sample):
+        px1= critical_points[i]['px']
+        py1= critical_points[i]['py']
+        pz1= critical_points[i]['pz']
+        
+        px.append(px1)
+        py.append(py1)
+        pz.append(pz1)
+            
+    ax.scatter(px,py,pz,alpha=0.3,s=5,c='purple',label='Critical Points')
 
 def plot_nodes(fil_dict,ax): 
     """
@@ -356,6 +384,153 @@ def cp_plotter(cp):
     x = coordinates[:,0] ; y = coordinates[:,1] ; z = coordinates[:,2]
     return x, y, z
 
+def get_tot_fils(systems,syst,filament_dict,cube_gas,rescale2phys = True,rescale2codeedge=False,switch_coords=False,cosmic=False):
+    xfils = []
+    yfils = []
+    zfils = []
+    
+    for filament_idx in range(int(filament_dict['nfils'])):
+        nsamp = filament_dict['filaments'][filament_idx]['nsamp']
+        
+        pxs,pys,pzs = [],[],[]
+        for i in range(nsamp):
+            positions = filament_dict['filaments'][filament_idx]['px,py,pz']
+            px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
+            
+            if rescale2phys:
+                
+                #get filaments to code edges 
+                zibest,hx,hy,hz,xmin,xmax, ymin, ymax, zmin, zmax = get_gas_coords(cube_gas,systems=systems,syst=syst,verbose=False,code_HAGN=True)
+                
+                if switch_coords:
+                    pxr = rescale_to_1d_code_edges(px_,start=ymin,end=ymax)
+                    pyr = rescale_to_1d_code_edges(py_,start=xmin,end=xmax)
+                    pzr = rescale_to_1d_code_edges(pz_,start=zmin,end=zmax)
+                else:
+                    pxr = rescale_to_1d_code_edges(px_,start=xmin,end=xmax)
+                    pyr = rescale_to_1d_code_edges(py_,start=ymin,end=ymax)
+                    pzr = rescale_to_1d_code_edges(pz_,start=zmin,end=zmax)
+                
+                
+                px_r,py_r,pz_r = rescale_from_code_to_HAGN(pxr,pyr,pzr,aexp=0.82587326)
+                pxs.append(px_r)
+                pys.append(py_r)
+                pzs.append(pz_r)
+                
+            elif rescale2codeedge:
+                #get filaments to code edges 
+                zibest,hx,hy,hz,xmin,xmax, ymin, ymax, zmin, zmax = get_gas_coords(cube_gas,systems=systems,syst=syst,verbose=False,code_HAGN=True)
+                pxr = rescale_to_1d_code_edges(px_,start=xmin,end=xmax)
+                pyr = rescale_to_1d_code_edges(py_,start=ymin,end=ymax)
+                pzr = rescale_to_1d_code_edges(pz_,start=zmin,end=zmax)
+                
+                
+                pxs.append(pxr)
+                pys.append(pyr)
+                pzs.append(pzr)
+            
+            elif cosmic:
 
+                minfils,maxfils = get_maxmin_fils(filament_dict,cube_gas)
+
+
+                #first rescale everything
+                px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
+
+                pxr,pyr,pzr = rescale_0_to_1(minfils,maxfils,px_,py_,pz_)
+
+                px_nh,py_nh,pz_nh = rescale_from_code_to_NH(pxr,pyr,pzr,aexp=0.82587326)
+                pxs.append(px_nh)
+                pys.append(py_nh)
+                pzs.append(pz_nh)
+
+                
+            else:
+                pxs.append(px_)
+                pys.append(py_)
+                pzs.append(pz_)
+
+
+        pxs = np.asarray(pxs)
+        pys = np.asarray(pys)
+        pzs = np.asarray(pzs)
+
+    
+        xlist = list(pxs)
+        ylist = list(pys)
+        zlist = list(pzs)
+        
+
+        xfils.append(xlist)
+        yfils.append(ylist)
+        zfils.append(zlist)
+
+    
+    return xfils,yfils,zfils 
+    
+    
+            
+
+            
+"""            elif cosmic:
+                #first rescale everything
+                px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
+                
+                ext_min = 0.4152412325636912
+                ext_max = 0.5847587674363087
+
+                pxr,pyr,pzr = rescale_to_code_edges(px_,py_,pz_,start=ext_min,end=ext_max)
+    
+                length_of_box = ext_max-ext_min
+                rsx,rsy,rsz = rescale_0_to_1(ext_min,ext_max,pxr,pyr,pzr)
+
+                px_nh,py_nh,pz_nh = rescale_from_code_to_NH(rsx,rsy,rsz,aexp=0.82587326)
+                pxs.append(px_nh)
+                pys.append(py_nh)
+                pzs.append(pz_nh)
+
+"""
+
+def get_maxmin_fils(filament_dict,cube_gas):
+    
+    xfils = []
+    yfils = []
+    zfils = []
+    
+    for filament_idx in range(int(filament_dict['nfils'])):
+        nsamp = filament_dict['filaments'][filament_idx]['nsamp']
+        
+        pxs,pys,pzs = [],[],[]
+        for i in range(nsamp):
+            positions = filament_dict['filaments'][filament_idx]['px,py,pz']
+            px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
+            pxs.append(px_)
+            pys.append(py_)
+            pzs.append(pz_)
+
+            
+            
+        pxs = np.asarray(pxs)
+        pys = np.asarray(pys)
+        pzs = np.asarray(pzs)
+
+    
+        xlist = list(pxs)
+        ylist = list(pys)
+        zlist = list(pzs)
+        
+
+        xfils.append(xlist)
+        yfils.append(ylist)
+        zfils.append(zlist)
+            
+            
+    d_filsx_arr = np.asarray([item for sublist in xfils for item in sublist])
+    d_filsy_arr = np.asarray([item for sublist in yfils for item in sublist])
+
+    minfils = min(d_filsx_arr)
+    maxfils = max(d_filsx_arr)
+    
+    return minfils, maxfils
 
 

@@ -1,29 +1,51 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd 
+import pandas as pd
+
+from matplotlib.patches import Circle, PathPatch
+from mpl_toolkits import mplot3d
+from matplotlib import cm
+import scipy.stats as ss
+import scipy.signal as sig
+from matplotlib.collections import PatchCollection
+from matplotlib.patches import Rectangle as Rectangle
+import mpl_toolkits.mplot3d.art3d as art3d
+import random
+from scipy.io import FortranFile 
+from astropy.io import ascii
+from astropy.table import Table
+
+from scipy import spatial #this is what we use to implement KDTree
+
+
+
 
 #This package are tools that for Hew Horizona dn New Horizon AGN Simulated Boxes
 
-def read_cube(file):
+
+
+def read(file):
     """
-    Reads in frotran file cube and returns files as an array. 
+    Reads in frotran file cube and returns crutial information about the gas cube
     ------------------------------------------------------------
     Parameters
 
+    file: the file or file path of desired cube
+    
     ------------------------------------------------------------
     Returns
 
+    cube: a 3D arrayt of values from the 
+    sizes: the length width and depth sizes of your cube
     """
     
-    f = fort(file,'r') #reading in as fortran file
+    f = FortranFile(file,'r') #reading in as fortran file
     
     sizes = f.read_record('i') #getting the sizes of each axis 
     
-    nx,ny,nz= sizes[0],sizes[1],sizes[2] #labeling x,y,z sizes
+    cube =f.read_reals(dtype='f4').reshape((sizes[0],sizes[1],sizes[2]),order='F') #for fortran files 
     
-    cube =f.read_reals(dtype='f4').reshape((nx,ny,nz),order='F') #for fortran files 
-    
-    return cube,sizes,nx,ny,nz
+    return cube,sizes
 
 
 def scale_code_to_NH(cube,axep):
@@ -273,156 +295,6 @@ def find_min_max(x,y,z):
     print('length,x', xmax - xmin)
     print('length,y', ymax - ymin)
     print('length,z', zmax - zmin)
-    
-    
-def get_tot_fils(systems,syst,filament_dict,cube_gas,rescale2phys = True,rescale2codeedge=False,switch_coords=False,cosmic=False):
-    xfils = []
-    yfils = []
-    zfils = []
-    
-    for filament_idx in range(int(filament_dict['nfils'])):
-        nsamp = filament_dict['filaments'][filament_idx]['nsamp']
-        
-        pxs,pys,pzs = [],[],[]
-        for i in range(nsamp):
-            positions = filament_dict['filaments'][filament_idx]['px,py,pz']
-            px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
-            
-            if rescale2phys:
-                
-                #get filaments to code edges 
-                zibest,hx,hy,hz,xmin,xmax, ymin, ymax, zmin, zmax = get_gas_coords(cube_gas,systems=systems,syst=syst,verbose=False,code_HAGN=True)
-                
-                if switch_coords:
-                    pxr = rescale_to_1d_code_edges(px_,start=ymin,end=ymax)
-                    pyr = rescale_to_1d_code_edges(py_,start=xmin,end=xmax)
-                    pzr = rescale_to_1d_code_edges(pz_,start=zmin,end=zmax)
-                else:
-                    pxr = rescale_to_1d_code_edges(px_,start=xmin,end=xmax)
-                    pyr = rescale_to_1d_code_edges(py_,start=ymin,end=ymax)
-                    pzr = rescale_to_1d_code_edges(pz_,start=zmin,end=zmax)
-                
-                
-                px_r,py_r,pz_r = rescale_from_code_to_HAGN(pxr,pyr,pzr,aexp=0.82587326)
-                pxs.append(px_r)
-                pys.append(py_r)
-                pzs.append(pz_r)
-                
-            elif rescale2codeedge:
-                #get filaments to code edges 
-                zibest,hx,hy,hz,xmin,xmax, ymin, ymax, zmin, zmax = get_gas_coords(cube_gas,systems=systems,syst=syst,verbose=False,code_HAGN=True)
-                pxr = rescale_to_1d_code_edges(px_,start=xmin,end=xmax)
-                pyr = rescale_to_1d_code_edges(py_,start=ymin,end=ymax)
-                pzr = rescale_to_1d_code_edges(pz_,start=zmin,end=zmax)
-                
-                
-                pxs.append(pxr)
-                pys.append(pyr)
-                pzs.append(pzr)
-            
-            elif cosmic:
-
-                minfils,maxfils = get_maxmin_fils(filament_dict,cube_gas)
-
-
-                #first rescale everything
-                px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
-
-                pxr,pyr,pzr = rescale_0_to_1(minfils,maxfils,px_,py_,pz_)
-
-                px_nh,py_nh,pz_nh = rescale_from_code_to_NH(pxr,pyr,pzr,aexp=0.82587326)
-                pxs.append(px_nh)
-                pys.append(py_nh)
-                pzs.append(pz_nh)
-
-                
-            else:
-                pxs.append(px_)
-                pys.append(py_)
-                pzs.append(pz_)
-
-
-        pxs = np.asarray(pxs)
-        pys = np.asarray(pys)
-        pzs = np.asarray(pzs)
-
-    
-        xlist = list(pxs)
-        ylist = list(pys)
-        zlist = list(pzs)
-        
-
-        xfils.append(xlist)
-        yfils.append(ylist)
-        zfils.append(zlist)
-
-    
-    return xfils,yfils,zfils 
-    
-    
-            
-
-            
-"""            elif cosmic:
-                #first rescale everything
-                px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
-                
-                ext_min = 0.4152412325636912
-                ext_max = 0.5847587674363087
-
-                pxr,pyr,pzr = rescale_to_code_edges(px_,py_,pz_,start=ext_min,end=ext_max)
-    
-                length_of_box = ext_max-ext_min
-                rsx,rsy,rsz = rescale_0_to_1(ext_min,ext_max,pxr,pyr,pzr)
-
-                px_nh,py_nh,pz_nh = rescale_from_code_to_NH(rsx,rsy,rsz,aexp=0.82587326)
-                pxs.append(px_nh)
-                pys.append(py_nh)
-                pzs.append(pz_nh)
-
-"""
-
-def get_maxmin_fils(filament_dict,cube_gas):
-    
-    xfils = []
-    yfils = []
-    zfils = []
-    
-    for filament_idx in range(int(filament_dict['nfils'])):
-        nsamp = filament_dict['filaments'][filament_idx]['nsamp']
-        
-        pxs,pys,pzs = [],[],[]
-        for i in range(nsamp):
-            positions = filament_dict['filaments'][filament_idx]['px,py,pz']
-            px_,py_,pz_ = positions[i][0],positions[i][1],positions[i][2]
-            pxs.append(px_)
-            pys.append(py_)
-            pzs.append(pz_)
-
-            
-            
-        pxs = np.asarray(pxs)
-        pys = np.asarray(pys)
-        pzs = np.asarray(pzs)
-
-    
-        xlist = list(pxs)
-        ylist = list(pys)
-        zlist = list(pzs)
-        
-
-        xfils.append(xlist)
-        yfils.append(ylist)
-        zfils.append(zlist)
-            
-            
-    d_filsx_arr = np.asarray([item for sublist in xfils for item in sublist])
-    d_filsy_arr = np.asarray([item for sublist in yfils for item in sublist])
-
-    minfils = min(d_filsx_arr)
-    maxfils = max(d_filsx_arr)
-    
-    return minfils, maxfils
 
 
 def flatten_cube(cube,axis=2):
