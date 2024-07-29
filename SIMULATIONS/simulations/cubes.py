@@ -14,14 +14,11 @@ import random
 from scipy.io import FortranFile 
 from astropy.io import ascii
 from astropy.table import Table
+from scipy.ndimage import gaussian_filter
 
 from scipy import spatial #this is what we use to implement KDTree
 
-
-
-
 #This package are tools that for Hew Horizona dn New Horizon AGN Simulated Boxes
-
 
 
 def read(file):
@@ -48,9 +45,20 @@ def read(file):
     return cube,sizes
 
 
-def scale_code_to_NH(cube,axep):
+def scale_code_to_NH(x,y,z,axep):
     """
     Transforms code units to NH scale
+    ----------------------------------------
+    Parameters
+    x,y,z: The gas cordinates 
+    axep: The expansion rate at the instance the cube was extracted from
+    ----------------------------------------
+    Returns
+
+    xnh:
+    ynh:
+    znh:
+    
     """
     
     H0 = 0.703000030517578e2
@@ -74,6 +82,79 @@ def scale_code_to_NH(cube,axep):
     znh -= c
     
     return xnh,ynh,znh
+
+
+def find_pixel_centers(image):
+    """""
+    Find the center coordinates of each pixel in the 3D image.
+    =============================================================
+    Parameters:
+        image (numpy.ndarray): 3D array representing the image.
+
+    =============================================================
+    Returns:
+        numpy.ndarray: Array of shape (N, 3) containing the center coordinates of each pixel.
+
+    """""
+
+    height, width, depth = image.shape
+    #so each of the these lines starts with the center of a pixel and increments by 1
+    x = np.arange(0.5, width, 1)
+    #print(x)
+    y = np.arange(0.5, height, 1)
+    z = np.arange(0.5, depth, 1)
+    #forming 3, 3D coordinate arrays
+    xv, yv, zv = np.meshgrid(x, y, z, indexing='ij')
+    #print(xv)
+    #flatten takes an array and puts everything in one dimension
+    #column_stack takes these 1-D arrays and stacks them as columns to make a 2D array
+    centers = np.column_stack((xv.flatten(), yv.flatten(), zv.flatten()))
+    return centers
+
+def write(cube,directory,save_name,integer=False):
+    """
+    Write a manipulated cube into a fortran file
+    -----------------------------------------------------
+    Parameters
+    cube: smoothed, scalled or manipulate cube 
+    directory: desired directory to
+    save_name: name of your new saved file 
+    integers: if you are writing a mask from 0-1 
+    -----------------------------------------------------
+    Returns
+    
+    """
+    cube_size = np.shape(cube)
+    size = np.asarray(cube_size,'i4')
+    cubedata = cube.reshape(cube_size[0],cube_size[1],cube_size[2],order='F')
+    f = FortranFile(directory+save_name, 'w')
+    f.write_record(size[1],size[0],size[2])
+    print(size)
+    #if you’re writing a mask where your values are 0 or 1
+    if integer:
+        f.write_record(cubedata,'i8')
+    else:
+        f.write_record(cubedata)
+    f.close()
+    print('File written to:', directory+save_name)
+
+
+def smooth(file,sigma= 5):
+    """
+    Uses gaussian smoothing to gas cube. The default is a 5 sigma smooth but can be edited.
+    ---------------------------------------------------------------------------------------
+    Parameters 
+    file: Fortran file of gas cube 
+    sigma: the amount of smoothing (default set to 5)
+    ---------------------------------------------------------------------------------------
+    Returns
+    smooth_gas(np.array): gas after gaussian smoothing
+    
+    """
+    rho, sizes =read(file)
+    smooth_gas= gaussian_filter(rho, sigma)
+    return smooth_gas 
+
 
 def rescale_0_to_1(xmin,xmax,x,y,z):
 
