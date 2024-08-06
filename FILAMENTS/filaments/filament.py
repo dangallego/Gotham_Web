@@ -5,7 +5,7 @@ import pandas as pd
 import sys
 import read_fils as rf
 
-class Filament:
+class Filament: 
     def __init__(self, path_to_filament_NDskl):
         self.path_to_filament_NDskl = path_to_filament_NDskl
         self.filament_dict = self.import_fils()
@@ -237,9 +237,6 @@ class Filament:
 
 
 
-
-
-    
 
 
     ### WIP DISTANCE ALGORITHM BELOW ### 
