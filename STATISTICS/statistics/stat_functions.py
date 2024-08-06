@@ -81,8 +81,6 @@ def plot_binned_data(x, y, x_label = None, y_label=None, num_bins=None):
     plt.show()
 
 
-
-
 def residuals(x, y, num_bins=None): 
     '''
     Takes a parameter y and decouples parameter x from it (finding the residuals), 
@@ -93,6 +91,7 @@ def residuals(x, y, num_bins=None):
     if num_bins == None:
         bin_medians, bin_edges, binnumber = stats.binned_statistic(x=x, values=y,statistic= 'median')
         std, s_edges, s_binnumber = stats.binned_statistic(x=x, values = y, statistic = 'std')
+        num_bins = len(bin_edges) - 1
     else: 
         bin_medians, bin_edges, binnumber = stats.binned_statistic(x=x, values=y,statistic= 'median', bins = num_bins)
         std, s_edges, s_binnumber = stats.binned_statistic(x=x, values = y, statistic = 'std', bins = num_bins)
