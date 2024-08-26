@@ -127,13 +127,13 @@ def residuals_masked(x, y, num_bins=None):
         Treats the delta parameter outliers using standard dev. of 4 and higher and masking.
         x and y must be numpy arrays.
         '''
-    deltaParam, y_exp, residuals = residuals_masked(x, y, num_bins=None)
+    deltaParam, y_exp, resid = residuals(x, y, num_bins=None)
 
     dmask = create_outlier_mask(deltaParam)
 
     delta_param = deltaParam[dmask]
     yexp = y_exp[dmask]
-    res = residuals[dmask]
+    res = resid[dmask]
     X = x[dmask] # the original "X" array (which has typically been logmstar); sliced by dmask 
  
     return delta_param, y_exp, res, X, dmask 
