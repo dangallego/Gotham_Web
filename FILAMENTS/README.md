@@ -4,7 +4,7 @@ This module contains useful methods for working with filament data, in particula
 
 1. Extracting_Filaments: short lesson on how to extract filaments using the Infinity cluster (ie. the commands and which scripts to use), as well as how to read in the (.NDskl) skeleton files into Jupyter Notebooks. 
 
-2. Fil_Tutorail: a tutorial of the *filament.py* package and the methods included within the Filament class. In regards to the class, this tutorial provides examples of: 
+2. Fil_Tutorial: a tutorial of the *filament.py* package and the methods included within the Filament class. In regards to the class, this tutorial provides examples of: 
     a. Importing the class
     b. Utilizing import filaments method (*Filament.import_fils*)
     c. Working with filament dictionary data structure (what is returned initially from reading in filament skeletons)
