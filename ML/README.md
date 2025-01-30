@@ -1,6 +1,8 @@
-# MACHINE LEARNING TOOLS
+# Machine Learning Tools
 
-The ML subpackage is designed to explore the application of machine learning to filament and galaxy data, providing a framework to work with autoencoders and neural networks for dimensionality reduction and prediction tasks. This module introduces the basics of encoding galaxy and filament characteristics into a lower-dimensional latent space and then utilizing that latent space for predictive modeling, with the flexibility to make predictions about either galaxy properties, filament characteristics, or both. Developed by Daniel Gallego. 
+**Developers**: Daniel Gallego.
+
+The ML subpackage is designed to explore the application of machine learning to filament and galaxy data, providing a framework to work with autoencoders and neural networks for dimensionality reduction and prediction tasks. This module introduces the basics of encoding galaxy and filament characteristics into a lower-dimensional latent space and then utilizing that latent space for predictive modeling, with the flexibility to make predictions about either galaxy properties, filament characteristics, or both. 
 
 This subpackage includes:
 

@@ -1,6 +1,8 @@
-# OBSERVATION TOOLS
+# Observation Tools
 
-The OBSERVATIONS subpackage provides routines and tools for working with observational galaxy survey data, specifically from the Galaxy and Mass Assembly (GAMA) and Legacy Survey of Space and Time (LSST) surveys. This module supports tasks such as data conversion and trimming, specifically to make the integration of observational data into analysis workflows smoother and more efficient. As new data from the Vera Rubin Observatory’s LSST become available, additional routines will be developed to work with this type of data. Developed and maintained by Daniel Gallego, Lianys Feliciano, and Charlotte Olsen. 
+**Developers**: Daniel Gallego, Lianys Feliciano, Charlotte Olsen. 
+
+The OBSERVATIONS subpackage provides routines and tools for working with observational galaxy survey data, specifically from the Galaxy and Mass Assembly (GAMA) and Legacy Survey of Space and Time (LSST) surveys. This module supports tasks such as data conversion and trimming, specifically to make the integration of observational data into analysis workflows smoother and more efficient. As new data from the Vera Rubin Observatory’s LSST become available, additional routines will be developed to work with this type of data. 
 
 This subpackage includes:
 

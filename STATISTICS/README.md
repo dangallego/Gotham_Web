@@ -1,6 +1,8 @@
-## STATISTICS TOOLS
+# Statistics Tools
 
-This module provides useful tools for performing statistical analysis of data. This routine was developed by Daniel Gallego. The list of available tutorials and descriptions are below: 
+**Developers**: Daniel Gallego, Janvi Madhani. 
+
+This module provides useful tools for performing statistical analysis of data. The list of available tutorials and descriptions are below: 
 
 1. Summary_Statistics: short lesson on some of the different kinds of summary statistics (mean, median, mode, standard deviation, etc) as they are available through the Numpy package. 
 

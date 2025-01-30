@@ -1,6 +1,8 @@
-## FILAMENT TOOLS
+# Filament Tools
 
-This module contains useful methods for working with filament data, in particular after having retrieved filament skeleton files from DisPerSE. These routines were developed by Lianys Feliciano, Daniel Gallego and Janvi Madhani. The list of available tutorials are: 
+**Developers**: Janvi Madhani, Lianys Feliciano, Daniel Gallego. 
+
+This module contains useful methods for working with filament data, in particular after having retrieved filament skeleton files from DisPerSE. The list of available tutorials are: 
 
 1. Extracting_Filaments: short lesson on how to extract filaments using the Infinity cluster (ie. the commands and which scripts to use), as well as how to read in the (.NDskl) skeleton files into Jupyter Notebooks. 
 

@@ -1,6 +1,8 @@
-# INTRO PYTHON TOOLS
+# Intro Python Tools
 
-This module provides helpful tools for getting more comfortable with many of it's popular packages, as well as diving into some specific tools and tricks that will be useful for learning to utilize the rest of the tools in this repository. This routine was developed by Lianys Feliciano and Daniel Gallego. The list of tutorials available are: 
+**Developers**: Lianys Feliciano, Daniel Gallego.
+
+This module provides helpful tools for getting more comfortable with many of it's popular packages, as well as diving into some specific tools and tricks that will be useful for learning to utilize the rest of the tools in this repository. The list of tutorials available are: 
 
 1. Intro_to_Python: introductory Python tutorials with available exercises. Shows how to navigate a Jupyter Notebook, the different opreators in Python, arrays and other data structures, and conditional statements. 
 

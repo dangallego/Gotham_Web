@@ -1,6 +1,8 @@
-# SIMULATION TOOLS
+# Simulation Tools
 
-This module includes tools and methods for working with simulation data, specifically for preparing and analyzing 3D data cubes. The tools are intended to streamline workflows in processing and interpreting data from simulations. Developed and maintained by Lianys Feliciano, Janvi Madhani, and Sneha Nair, this module includes tutorials and scripts aimed at guiding users through common simulation-related tasks, such as creating 3D grids and preparing data for DisPerSE.
+**Developers**: Lianys Feliciano, Janvi Madhani, Sneha Nair. 
+
+This module includes tools and methods for working with simulation data, specifically for preparing and analyzing 3D data cubes. The tools are intended to streamline workflows in processing and interpreting data from simulations. This module includes tutorials and scripts aimed at guiding users through common simulation-related tasks, such as creating 3D grids and preparing data for DisPerSE.
 
 The contents of this module include:
 
