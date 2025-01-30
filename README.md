@@ -1,8 +1,17 @@
 # Gotham Web Tools
 
-**Developers**: Lianys Feliciano, Daniel Gallego, Janvi Madhani, under the supervision of Dr. Charlotte Welker. 
+**Principal Investigator**: Dr. Charlotte Welker
+**Project Maintained by**: Gotham Web Research Group  
 
-This repo centralizes and generalizes a number of modules used across the GothamWeb group to analyze hydro simulations, characterize the cosmic web in cosmological 
+### Contributors
+This project is developed and maintained by members of Dr. Charlotte Welker's Gotham Web Research Group at the NYC College of Technology and the American Museum of Natural History. Major contributions have been made by the following, listed alphabetically:
+
+- Lianys Feliciano
+- Daniel Gallego
+- Janvi Madhani
+- Sneha Nair
+
+This repo centralizes and generalizes a number of modules used across the Gotham Web group to analyze hydro simulations, characterize the cosmic web in cosmological 
 simulations and/or spectroscopic galaxy datasets and perform statistical analysis on large datasets. It also includes introductory tutorials aimed at Python and HPC beginners.
 
 The repo is organized into a number of sub-directories that aim to provide the tools and a hopefully thorough explanation of how to use those tools for users from all backgrounds, including beginners. Each sub-directory (which is the same as saying each "sub-folder") is, for the most part, comprised of the following: 
