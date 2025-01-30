@@ -1,3 +1,8 @@
+# cube_class.py
+# Developed by: Lianys Feliciano
+# Contributions by: Janvi Madhani - contributed many methods later adpated for this class
+#                   Sneha Nair - contributed methods later adapted for this class. 
+
 """
 README: 
 This is a formal class to insert all gas cube related functions

@@ -1,3 +1,7 @@
+# cubes.py
+# Developed by: 
+# Contributions by: 
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
