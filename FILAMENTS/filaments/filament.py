@@ -1,3 +1,8 @@
+# filament.py
+# Developed by: Daniel Gallego
+# Contributions by: Lianys Feliciano - contributed substantially to Distance algorithm, particularly in the simulations case. 
+#                   Janvi Madhani - contributed methodology in reading in filaments to Python. 
+
 import numpy as np 
 import pandas as pd 
 from scipy import spatial

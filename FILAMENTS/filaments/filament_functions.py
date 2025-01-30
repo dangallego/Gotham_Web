@@ -1,3 +1,7 @@
+# filament_functions.py
+# Developed by: Lianys Feliciano 
+# Contributions by: Daniel Gallego - added plotting functions and functions for working with dictionary structure returned from read_fils.py routine. 
+
 import numpy as np 
 import pandas as pd 
 import matplotlib.pyplot as plt

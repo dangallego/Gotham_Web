@@ -1,4 +1,5 @@
-#gama_functions.py
+# gama_functions.py
+# Developed by: Daniel Gallego
 
 '''
 Python file containing list of useful functions for working with GAMA data. 

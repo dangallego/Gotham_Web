@@ -1,4 +1,5 @@
-#commong_functions.py
+# common_functions.py
+# Developed by: Daniel Gallego, Lianys Feliciano
 
 '''
 Python file containing list of functions that are useful across the entire Gotham Web project.  

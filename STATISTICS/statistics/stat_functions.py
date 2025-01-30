@@ -1,8 +1,9 @@
-# statistics functions
+# stat_functions.py
+# Developed by: Daniel Gallego
+# Contributions by: Janvi Madhani - Added get_lin_params(x,y) function for fitting linear polynomial and calculating Pearson correlation coefficient and p-value. 
 
 '''
 Python file containing list of functions useful for conducting statistical analysis of data sets. 
-
 '''
 import numpy as np 
 import scipy.stats as ss
@@ -11,6 +12,7 @@ import matplotlib.pyplot as plt
 
 
 #### OUTLIER TREATMENT ####
+
 def filter_outliers_by_std(dataframe, parameter, num_sigmas=3, use_median=False):
     '''
     Removes outliers from a DataFrame based on the specified number of standard deviations from the mean or median.
@@ -54,6 +56,7 @@ def create_outlier_mask(array, num_sigmas=4):
 
 
 #### RESIDUAL METHODS ####
+
 def plot_binned_data(x, y, x_label = None, y_label=None, num_bins=None):
     '''
     Plots relational scatter plot between two parameters.
@@ -142,7 +145,7 @@ def residuals_masked(x, y, num_bins=None):
 
 #### RESAMPLING METHODS ####
 
-def get_lin_params(x,y):    # courtesy of Janvi!
+def get_lin_params(x,y):    
     '''
     Fits a linear polynomial to the given x and y data points and calculates the Pearson correlation coefficient as well as its p-value.
     Utilizies numpy and scipy.stats for calculating Pearson correlation. 

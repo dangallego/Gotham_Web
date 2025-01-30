@@ -1,3 +1,6 @@
+# ml_functions.py
+# Developed by: Daniel Gallego
+
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf

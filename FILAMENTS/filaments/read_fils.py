@@ -1,5 +1,8 @@
 # read_fil functions: #intialization file and functions/classes created by Janvi Madhani 
-
+# Developed by: Janvi Madhani 
+'''
+Extensive module created by Janvi Madhani to read in files from DisPerSE into Python as dictionaries. 
+'''
 import os
 from os.path import join
 import re
